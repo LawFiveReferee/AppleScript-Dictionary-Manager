@@ -1,6 +1,6 @@
 import Foundation
 
-// NOTE: No @MainActor here.
+// Simple SDEF writer (NOT @MainActor)
 struct SDEFWriter {
     static func makeXML(from model: SDEFDocumentModel, title: String = "Dictionary") -> Data {
         var xml = """

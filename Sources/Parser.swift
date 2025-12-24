@@ -1,7 +1,6 @@
 import Foundation
 
-// Parses suites, classes, commands, properties, parameters from SDEF/XML.
-// NOTE: No @MainActor here.
+// Minimal SDEF parser (NOT @MainActor)
 final class SDEFParser: NSObject, XMLParserDelegate {
     private var model = SDEFDocumentModel()
     private var currentSuite: Suite?
@@ -16,23 +15,18 @@ final class SDEFParser: NSObject, XMLParserDelegate {
         xml.shouldReportNamespacePrefixes = false
         xml.shouldResolveExternalEntities = false
         guard xml.parse() else {
-            throw xml.parserError ?? NSError(
-                domain: "SDEFParser", code: 1,
-                userInfo: [NSLocalizedDescriptionKey: "Unknown XML parse error"]
-            )
+            throw xml.parserError ?? NSError(domain: "SDEFParser", code: 1,
+                                             userInfo: [NSLocalizedDescriptionKey: "Unknown XML parse error"])
         }
         return delegate.model
     }
 
-    // MARK: XMLParserDelegate
     func parser(_ parser: XMLParser, didStartElement name: String, namespaceURI: String?, qualifiedName qName: String?, attributes: [String : String] = [:]) {
         switch name {
         case "suite":
-            currentSuite = Suite(name: attributes["name"] ?? "Suite",
-                                 code: attributes["code"] ?? "????")
+            currentSuite = Suite(name: attributes["name"] ?? "Suite", code: attributes["code"] ?? "????")
         case "class":
-            currentClass = ClassDef(name: attributes["name"] ?? "class",
-                                    code: attributes["code"] ?? "Clss")
+            currentClass = ClassDef(name: attributes["name"] ?? "class", code: attributes["code"] ?? "Clss")
         case "property":
             if var cls = currentClass {
                 cls.properties.append(Property(name: attributes["name"] ?? "property",
@@ -41,8 +35,7 @@ final class SDEFParser: NSObject, XMLParserDelegate {
                 currentClass = cls
             }
         case "command":
-            currentCommand = Command(name: attributes["name"] ?? "command",
-                                     code: attributes["code"] ?? "cmnd")
+            currentCommand = Command(name: attributes["name"] ?? "command", code: attributes["code"] ?? "cmnd")
         case "parameter":
             if var cmd = currentCommand {
                 let opt = (attributes["optional"]?.lowercased() == "yes")

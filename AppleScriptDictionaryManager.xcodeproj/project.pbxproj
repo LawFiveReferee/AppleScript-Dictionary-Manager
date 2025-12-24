@@ -23,6 +23,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8370B65B2EFC6EF20086B8A6 /* AppleScriptDictionaryManager.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = AppleScriptDictionaryManager.xcodeproj; sourceTree = "<group>"; };
 		83A786192EFB32BF0057124D /* AppleScriptDictionaryManager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AppleScriptDictionaryManager.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		83A7862C2EFB330D0057124D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		83A7862E2EFB333A0057124D /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
@@ -71,9 +72,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8370B65C2EFC6EF20086B8A6 /* Products */ = {
+			isa = PBXGroup;
+			name = Products;
+			sourceTree = "<group>";
+		};
 		83A786102EFB32BF0057124D = {
 			isa = PBXGroup;
 			children = (
+				8370B65B2EFC6EF20086B8A6 /* AppleScriptDictionaryManager.xcodeproj */,
 				83A7864C2EFB70300057124D /* README.md */,
 				83A7864A2EFB6FCA0057124D /* .gitignore */,
 				83A7862B2EFB32E20057124D /* Resources */,
@@ -168,6 +175,12 @@
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 83A7861A2EFB32BF0057124D /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 8370B65C2EFC6EF20086B8A6 /* Products */;
+					ProjectRef = 8370B65B2EFC6EF20086B8A6 /* AppleScriptDictionaryManager.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				83A786182EFB32BF0057124D /* AppleScriptDictionaryManager */,
