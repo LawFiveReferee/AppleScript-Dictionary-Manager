@@ -1,4 +1,4 @@
-# .github/workflows/macos.yml
+# .github/workflows/main.yml
 name: macOS Build
 
 on:
@@ -16,7 +16,7 @@ jobs:
       - name: Select Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: '15.2'   # matches your local 17C52
+          xcode-version: '15.2'   # matches Xcode 17C52
 
       - name: Build
         run: |
