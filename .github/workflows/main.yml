@@ -16,7 +16,7 @@ jobs:
       - name: Select Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: '15.2'   # match your local Xcode (15.2 = 17C52)
+          xcode-version: '15.2'   # matches your local 17C52
 
       - name: Build
         run: |
@@ -34,4 +34,3 @@ jobs:
         with:
           name: AppleScriptDictionaryManager-Debug
           path: DerivedData/Build/Products/Debug/AppleScriptDictionaryManager.app
-          
