@@ -1,12 +1,23 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<!--
-   info.plist
-   AppleScriptDictionaryManager
+<key>CFBundleDocumentTypes</key>
+<array>
+  <dict>
+    <key>CFBundleTypeName</key><string>Scripting Definition (SDEF)</string>
+    <key>CFBundleTypeRole</key><string>Editor</string>
+    <key>LSHandlerRank</key><string>Default</string>
 
-   Created by Ed Stockly on 12/23/25.
-   Copyright (c) 2025 ___ORGANIZATIONNAME___. All rights reserved.
--->
-<plist version="1.0">
-<dict/>
-</plist>
+    <key>CFBundleTypeExtensions</key>
+    <array>
+      <string>sdef</string>
+      <string>xml</string>
+    </array>
+
+    <key>LSItemContentTypes</key>
+    <array>
+      <string>com.apple.scripting-definition</string>
+      <string>public.xml</string>
+    </array>
+
+    <!-- Module-qualified Swift class name -->
+    <key>NSDocumentClass</key><string>$(PRODUCT_MODULE_NAME).SDEDocument</string>
+  </dict>
+</array>

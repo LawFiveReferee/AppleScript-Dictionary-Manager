@@ -6,13 +6,55 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		83A7862D2EFB330D0057124D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A7862C2EFB330D0057124D /* AppDelegate.swift */; };
+		83A7862F2EFB333A0057124D /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A7862E2EFB333A0057124D /* MainViewController.swift */; };
+		83A786312EFB33560057124D /* SDEDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A786302EFB33560057124D /* SDEDocument.swift */; };
+		83A786332EFB343B0057124D /* info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 83A786322EFB343B0057124D /* info.plist */; };
+		83A7863C2EFB383D0057124D /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A7863B2EFB383D0057124D /* Model.swift */; };
+		83A7863E2EFB385F0057124D /* DictionaryOutlineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A7863D2EFB385F0057124D /* DictionaryOutlineViewController.swift */; };
+		83A786412EFB41850057124D /* Main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A786402EFB41850057124D /* Main.swift */; };
+		83A786432EFB42270057124D /* DictionaryPreviewVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A786422EFB42270057124D /* DictionaryPreviewVM.swift */; };
+		83A786452EFB425C0057124D /* DictionaryPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A786442EFB425C0057124D /* DictionaryPreview.swift */; };
+		83A786472EFB44140057124D /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A786462EFB44140057124D /* Parser.swift */; };
+		83A7864B2EFB6FCA0057124D /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 83A7864A2EFB6FCA0057124D /* .gitignore */; };
+		83A7864D2EFB70300057124D /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 83A7864C2EFB70300057124D /* README.md */; };
+		83A7864F2EFB7A9B0057124D /* SDEFWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A7864E2EFB7A9B0057124D /* SDEFWriter.swift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		83A786192EFB32BF0057124D /* AppleScriptDictionaryManager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AppleScriptDictionaryManager.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		83A7862C2EFB330D0057124D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		83A7862E2EFB333A0057124D /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		83A786302EFB33560057124D /* SDEDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDEDocument.swift; sourceTree = "<group>"; };
+		83A786322EFB343B0057124D /* info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = info.plist; sourceTree = "<group>"; };
+		83A7863B2EFB383D0057124D /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+		83A7863D2EFB385F0057124D /* DictionaryOutlineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryOutlineViewController.swift; sourceTree = "<group>"; };
+		83A786402EFB41850057124D /* Main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Main.swift; sourceTree = "<group>"; };
+		83A786422EFB42270057124D /* DictionaryPreviewVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryPreviewVM.swift; sourceTree = "<group>"; };
+		83A786442EFB425C0057124D /* DictionaryPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryPreview.swift; sourceTree = "<group>"; };
+		83A786462EFB44140057124D /* Parser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
+		83A7864A2EFB6FCA0057124D /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; name = .gitignore; path = ../.gitignore; sourceTree = SOURCE_ROOT; };
+		83A7864C2EFB70300057124D /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		83A7864E2EFB7A9B0057124D /* SDEFWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDEFWriter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		83A786492EFB5ADE0057124D /* Exceptions for "AppleScriptDictionaryManager" folder in "AppleScriptDictionaryManager" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 83A786182EFB32BF0057124D /* AppleScriptDictionaryManager */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		83A7861B2EFB32C00057124D /* AppleScriptDictionaryManager */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				83A786492EFB5ADE0057124D /* Exceptions for "AppleScriptDictionaryManager" folder in "AppleScriptDictionaryManager" target */,
+			);
 			path = AppleScriptDictionaryManager;
 			sourceTree = "<group>";
 		};
@@ -32,6 +74,10 @@
 		83A786102EFB32BF0057124D = {
 			isa = PBXGroup;
 			children = (
+				83A7864C2EFB70300057124D /* README.md */,
+				83A7864A2EFB6FCA0057124D /* .gitignore */,
+				83A7862B2EFB32E20057124D /* Resources */,
+				83A7862A2EFB32D60057124D /* Sources */,
 				83A7861B2EFB32C00057124D /* AppleScriptDictionaryManager */,
 				83A7861A2EFB32BF0057124D /* Products */,
 			);
@@ -43,6 +89,31 @@
 				83A786192EFB32BF0057124D /* AppleScriptDictionaryManager.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		83A7862A2EFB32D60057124D /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				83A7862C2EFB330D0057124D /* AppDelegate.swift */,
+				83A7863D2EFB385F0057124D /* DictionaryOutlineViewController.swift */,
+				83A786422EFB42270057124D /* DictionaryPreviewVM.swift */,
+				83A786442EFB425C0057124D /* DictionaryPreview.swift */,
+				83A786402EFB41850057124D /* Main.swift */,
+				83A7862E2EFB333A0057124D /* MainViewController.swift */,
+				83A7863B2EFB383D0057124D /* Model.swift */,
+				83A786462EFB44140057124D /* Parser.swift */,
+				83A786302EFB33560057124D /* SDEDocument.swift */,
+				83A7864E2EFB7A9B0057124D /* SDEFWriter.swift */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		83A7862B2EFB32E20057124D /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				83A786322EFB343B0057124D /* info.plist */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -109,6 +180,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83A7864B2EFB6FCA0057124D /* .gitignore in Resources */,
+				83A7864D2EFB70300057124D /* README.md in Resources */,
+				83A786332EFB343B0057124D /* info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -119,6 +193,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83A786412EFB41850057124D /* Main.swift in Sources */,
+				83A786432EFB42270057124D /* DictionaryPreviewVM.swift in Sources */,
+				83A786452EFB425C0057124D /* DictionaryPreview.swift in Sources */,
+				83A7863C2EFB383D0057124D /* Model.swift in Sources */,
+				83A7862D2EFB330D0057124D /* AppDelegate.swift in Sources */,
+				83A786472EFB44140057124D /* Parser.swift in Sources */,
+				83A786312EFB33560057124D /* SDEDocument.swift in Sources */,
+				83A7863E2EFB385F0057124D /* DictionaryOutlineViewController.swift in Sources */,
+				83A7864F2EFB7A9B0057124D /* SDEFWriter.swift in Sources */,
+				83A7862F2EFB333A0057124D /* MainViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -258,8 +342,9 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = AppleScriptDictionaryManager/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSMainStoryboardFile = "";
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -291,8 +376,9 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = AppleScriptDictionaryManager/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSMainStoryboardFile = "";
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

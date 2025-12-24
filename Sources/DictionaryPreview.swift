@@ -1,8 +1,13 @@
-//
-//  DictionaryPreview.swift
-//  AppleScriptDictionaryManager
-//
-//  Created by Ed Stockly on 12/23/25.
-//
+import SwiftUI
 
-import Foundation
+struct DictionaryPreview: View {
+    @ObservedObject var vm: DictionaryPreviewVM
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text(vm.title).font(.title2)
+            Text(vm.details).font(.system(.body, design: .monospaced))
+            Spacer()
+        }
+        .padding()
+    }
+}

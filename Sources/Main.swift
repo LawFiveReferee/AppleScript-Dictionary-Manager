@@ -1,8 +1,12 @@
-//
-//  Main.swift
-//  AppleScriptDictionaryManager
-//
-//  Created by Ed Stockly on 12/23/25.
-//
+import Cocoa
 
-import Foundation
+@main
+struct Main {
+    static func main() {
+        let app = NSApplication.shared
+        let delegate = AppDelegate()
+        app.delegate = delegate
+        app.setActivationPolicy(.regular)
+        app.run()
+    }
+}
