@@ -1,10 +1,10 @@
 import Cocoa
 
 final class SDEDocument: NSDocument {
-    // Main-actor model the UI uses
+    // Main-actor model used by the UI
     private(set) var model = SDEFDocumentModel()
 
-    // Nonisolated buffer used by read/save (AppKit calls that are nonisolated)
+    // Nonisolated buffer used by read/save
     nonisolated(unsafe) private var parsedModelBuffer = SDEFDocumentModel()
 
     // AppKit overrides
@@ -51,6 +51,6 @@ final class SDEDocument: NSDocument {
         SDEFWriter.makeXML(from: parsedModelBuffer, title: "Dictionary")
     }
 
-    // Safe snapshot for export
+    // Snapshot used by AppDelegate export
     nonisolated func parsedModelSnapshot() -> SDEFDocumentModel { parsedModelBuffer }
 }

@@ -1,23 +1,40 @@
-<key>CFBundleDocumentTypes</key>
-<array>
-  <dict>
-    <key>CFBundleTypeName</key><string>Scripting Definition (SDEF)</string>
-    <key>CFBundleTypeRole</key><string>Editor</string>
-    <key>LSHandlerRank</key><string>Default</string>
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>CFBundleIdentifier</key>
+  <string>com.Stockly.AppleScriptDictionaryManager</string>
+  <key>CFBundleName</key>
+  <string>AppleScriptDictionaryManager</string>
+  <key>CFBundleExecutable</key>
+  <string>AppleScriptDictionaryManager</string>
+  <key>CFBundlePackageType</key>
+  <string>APPL</string>
+  <key>CFBundleShortVersionString</key>
+  <string>1.0</string>
+  <key>CFBundleVersion</key>
+  <string>1</string>
+  <key>LSMinimumSystemVersion</key>
+  <string>15.7</string>
+  <key>NSPrincipalClass</key>
+  <string>NSApplication</string>
 
-    <key>CFBundleTypeExtensions</key>
-    <array>
-      <string>sdef</string>
-      <string>xml</string>
-    </array>
-
-    <key>LSItemContentTypes</key>
-    <array>
-      <string>com.apple.scripting-definition</string>
-      <string>public.xml</string>
-    </array>
-
-    <!-- Module-qualified Swift class name -->
-    <key>NSDocumentClass</key><string>$(PRODUCT_MODULE_NAME).SDEDocument</string>
-  </dict>
-</array>
+  <!-- Claim .sdef and .xml so double-click/open works -->
+  <key>CFBundleDocumentTypes</key>
+  <array>
+    <dict>
+      <key>CFBundleTypeName</key>
+      <string>Scripting Definition</string>
+      <key>CFBundleTypeRole</key>
+      <string>Editor</string>
+      <key>LSHandlerRank</key>
+      <string>Alternate</string>
+      <key>LSItemContentTypes</key>
+      <array>
+        <string>com.apple.scripting-definition</string>
+        <string>public.xml</string>
+      </array>
+    </dict>
+  </array>
+</dict>
+</plist>

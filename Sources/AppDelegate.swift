@@ -3,15 +3,13 @@ import UniformTypeIdentifiers
 
 final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuItemValidation {
 
-    // MARK: App life cycle
     func applicationDidFinishLaunching(_ notification: Notification) {
         buildMainMenu()
     }
 
-    // Stop the “Cannot create document” alert on launch
     func applicationShouldOpenUntitledFile(_ sender: NSApplication) -> Bool { false }
 
-    // MARK: Menu
+    // MARK: - Menu
     private func buildMainMenu() {
         let main = NSMenu()
 
@@ -25,6 +23,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuItemValidation {
         let hideOthers = NSMenuItem(title: "Hide Others", action: #selector(NSApplication.hideOtherApplications(_:)), keyEquivalent: "h")
         hideOthers.keyEquivalentModifierMask = [.command, .option]
         appMenu.addItem(hideOthers)
+        appMenu.addItem(NSMenuItem.separator())
         appMenu.addItem(withTitle: "Quit \(appName)", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
         appItem.submenu = appMenu
 
@@ -48,10 +47,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuItemValidation {
         exportItem.target = self
         file.addItem(exportItem)
 
-        // (debug) export straight to Desktop (no panel)
-        let debugExport = NSMenuItem(title: "Export SDEF to Desktop (Debug)", action: #selector(exportSDEFToDesktopDebug(_:)), keyEquivalent: "")
-        debugExport.target = self
-        file.addItem(debugExport)
+        // Optional helper: reveal the app's sandbox Documents (where debug exports go)
+        let revealItem = NSMenuItem(title: "Reveal App Documents…", action: #selector(revealAppDocuments(_:)), keyEquivalent: "")
+        revealItem.target = self
+        file.addItem(revealItem)
 
         fileItem.submenu = file
 
@@ -70,19 +69,19 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuItemValidation {
         NSApp.mainMenu = main
     }
 
-    // MARK: Validation
+    // MARK: - Menu validation
     func validateMenuItem(_ menuItem: NSMenuItem) -> Bool {
         switch menuItem.action {
-        case #selector(newDocument(_:)), #selector(openDocument(_:)):
+        case #selector(newDocument(_:)), #selector(openDocument(_:)), #selector(revealAppDocuments(_:)):
             return true
-        case #selector(exportSDEF(_:)), #selector(exportSDEFToDesktopDebug(_:)):
+        case #selector(exportSDEF(_:)):
             return (NSDocumentController.shared.currentDocument as? SDEDocument) != nil
         default:
             return true
         }
     }
 
-    // MARK: Actions (force main thread for AppKit)
+    // MARK: - Actions (force main thread for AppKit)
     @objc func newDocument(_ sender: Any?) {
         if !Thread.isMainThread { return DispatchQueue.main.async { self.newDocument(sender) } }
         let doc = SDEDocument()
@@ -147,18 +146,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuItemValidation {
 
         func write(to url: URL) {
             do {
-                logFS(context: "before write (panel)", url: url)
-                // Ensure parent dir exists
-                try FileManager.default.createDirectory(at: url.deletingLastPathComponent(),
-                                                        withIntermediateDirectories: true)
                 let data = SDEFWriter.makeXML(from: doc.parsedModelSnapshot(), title: doc.displayName ?? "Dictionary")
                 try data.write(to: url, options: .atomic)
-                logFS(context: "after write (panel)", url: url)
             } catch {
-                logFS(context: "error (panel)", url: url, error: error)
-                let ns = error as NSError
                 let a = NSAlert(); a.messageText = "Export failed"
-                a.informativeText = "\(ns.localizedDescription) [\(ns.domain)#\(ns.code)]"
+                a.informativeText = error.localizedDescription
                 a.alertStyle = .warning; a.runModal()
             }
         }
@@ -173,61 +165,15 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuItemValidation {
         }
     }
 
-    // Panel-free debug export to Desktop (helps confirm write permissions)
-    @objc func exportSDEFToDesktopDebug(_ sender: Any?) {
-        if !Thread.isMainThread { return DispatchQueue.main.async { self.exportSDEFToDesktopDebug(sender) } }
-
-        guard let doc = NSDocumentController.shared.currentDocument as? SDEDocument else {
-            let a = NSAlert(); a.messageText = "No document is active"
-            a.informativeText = "Open a .sdef or create a new document first."
-            a.alertStyle = .warning; a.runModal(); return
-        }
-
-        let desktop = FileManager.default.urls(for: .desktopDirectory, in: .userDomainMask).first!
-        let out = desktop.appendingPathComponent("Export-\(Int(Date().timeIntervalSince1970)).sdef")
-
+    @objc func revealAppDocuments(_ sender: Any?) {
+        if !Thread.isMainThread { return DispatchQueue.main.async { self.revealAppDocuments(sender) } }
         do {
-            logFS(context: "before write (debug)", url: out)
-            let data = SDEFWriter.makeXML(from: doc.parsedModelSnapshot(), title: doc.displayName ?? "Dictionary")
-            try data.write(to: out, options: .atomic)
-            logFS(context: "after write (debug)", url: out)
+            let docs = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+            NSWorkspace.shared.activateFileViewerSelecting([docs])
         } catch {
-            logFS(context: "error (debug)", url: out, error: error)
-            let a = NSAlert(); a.messageText = "Export failed"
+            let a = NSAlert(); a.messageText = "Could not reveal folder"
             a.informativeText = error.localizedDescription
             a.alertStyle = .warning; a.runModal()
         }
-    }
-
-    // MARK: logging helper
-    private func logFS(context: String, url: URL, error: Error? = nil) {
-        let fm = FileManager.default
-        let parent = url.deletingLastPathComponent()
-
-        var isDir: ObjCBool = false
-        let parentExists = fm.fileExists(atPath: parent.path, isDirectory: &isDir)
-        let fileExists   = fm.fileExists(atPath: url.path)
-
-        let parentWritable = fm.isWritableFile(atPath: parent.path)
-        let fileWritable   = fm.isWritableFile(atPath: url.path)
-
-        let parentVals = try? parent.resourceValues(forKeys: [
-            .isReadableKey, .isWritableKey, .isExecutableKey, .volumeIsReadOnlyKey
-        ])
-        let fileVals = try? url.resourceValues(forKeys: [
-            .isReadableKey, .isWritableKey, .isExecutableKey, .volumeIsReadOnlyKey
-        ])
-
-        NSLog("""
-        [Export \(context)]
-        • target: \(url.path)
-        • parent: \(parent.path)
-          - parentExists=\(parentExists) isDir=\(isDir.boolValue) writable=\(parentWritable)
-          - parent RV: read=\(parentVals?.isReadable ?? false) write=\(parentVals?.isWritable ?? false) exec=\(parentVals?.isExecutable ?? false) volRO=\(parentVals?.volumeIsReadOnly ?? false)
-        • fileExists=\(fileExists) fileWritable=\(fileWritable)
-          - file RV: read=\(fileVals?.isReadable ?? false) write=\(fileVals?.isWritable ?? false) exec=\(fileVals?.isExecutable ?? false) volRO=\(fileVals?.volumeIsReadOnly ?? false)
-        • threadIsMain=\(Thread.isMainThread)
-        \(error.map { "• error=\(($0 as NSError).domain)#\(($0 as NSError).code) \(($0 as NSError).userInfo)" } ?? "")
-        """)
     }
 }

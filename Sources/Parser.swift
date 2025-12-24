@@ -15,8 +15,10 @@ final class SDEFParser: NSObject, XMLParserDelegate {
         xml.shouldReportNamespacePrefixes = false
         xml.shouldResolveExternalEntities = false
         guard xml.parse() else {
-            throw xml.parserError ?? NSError(domain: "SDEFParser", code: 1,
-                                             userInfo: [NSLocalizedDescriptionKey: "Unknown XML parse error"])
+            throw xml.parserError ?? NSError(
+                domain: "SDEFParser", code: 1,
+                userInfo: [NSLocalizedDescriptionKey: "Unknown XML parse error"]
+            )
         }
         return delegate.model
     }
