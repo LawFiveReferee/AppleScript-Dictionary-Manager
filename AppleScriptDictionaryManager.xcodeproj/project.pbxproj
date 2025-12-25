@@ -20,6 +20,7 @@
 		83A7864B2EFB6FCA0057124D /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 83A7864A2EFB6FCA0057124D /* .gitignore */; };
 		83A7864D2EFB70300057124D /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 83A7864C2EFB70300057124D /* README.md */; };
 		83A7864F2EFB7A9B0057124D /* SDEFWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A7864E2EFB7A9B0057124D /* SDEFWriter.swift */; };
+		83F701612EFC84A600793B0D /* PreviewTextBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F701602EFC84A600793B0D /* PreviewTextBuilder.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +39,7 @@
 		83A7864A2EFB6FCA0057124D /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; name = .gitignore; path = ../.gitignore; sourceTree = SOURCE_ROOT; };
 		83A7864C2EFB70300057124D /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		83A7864E2EFB7A9B0057124D /* SDEFWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDEFWriter.swift; sourceTree = "<group>"; };
+		83F701602EFC84A600793B0D /* PreviewTextBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewTextBuilder.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -110,6 +112,7 @@
 				83A7863B2EFB383D0057124D /* Model.swift */,
 				83A786462EFB44140057124D /* Parser.swift */,
 				83A786302EFB33560057124D /* SDEDocument.swift */,
+				83F701602EFC84A600793B0D /* PreviewTextBuilder.swift */,
 				83A7864E2EFB7A9B0057124D /* SDEFWriter.swift */,
 			);
 			path = Sources;
@@ -209,6 +212,7 @@
 				83A786412EFB41850057124D /* Main.swift in Sources */,
 				83A786432EFB42270057124D /* DictionaryPreviewVM.swift in Sources */,
 				83A786452EFB425C0057124D /* DictionaryPreview.swift in Sources */,
+				83F701612EFC84A600793B0D /* PreviewTextBuilder.swift in Sources */,
 				83A7863C2EFB383D0057124D /* Model.swift in Sources */,
 				83A7862D2EFB330D0057124D /* AppDelegate.swift in Sources */,
 				83A786472EFB44140057124D /* Parser.swift in Sources */,

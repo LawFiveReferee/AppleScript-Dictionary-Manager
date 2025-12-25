@@ -4,22 +4,29 @@
 <dict>
   <key>CFBundleIdentifier</key>
   <string>com.Stockly.AppleScriptDictionaryManager</string>
+
   <key>CFBundleName</key>
   <string>AppleScriptDictionaryManager</string>
+
   <key>CFBundleExecutable</key>
   <string>AppleScriptDictionaryManager</string>
+
   <key>CFBundlePackageType</key>
   <string>APPL</string>
+
   <key>CFBundleShortVersionString</key>
   <string>1.0</string>
+
   <key>CFBundleVersion</key>
   <string>1</string>
+
   <key>LSMinimumSystemVersion</key>
   <string>15.7</string>
+
   <key>NSPrincipalClass</key>
   <string>NSApplication</string>
 
-  <!-- Claim .sdef and .xml so double-click/open works -->
+  <!-- Claim .sdef and .xml; route them to SDEDocument -->
   <key>CFBundleDocumentTypes</key>
   <array>
     <dict>
@@ -34,6 +41,8 @@
         <string>com.apple.scripting-definition</string>
         <string>public.xml</string>
       </array>
+      <key>NSDocumentClass</key>
+      <string>$(PRODUCT_MODULE_NAME).SDEDocument</string>
     </dict>
   </array>
 </dict>

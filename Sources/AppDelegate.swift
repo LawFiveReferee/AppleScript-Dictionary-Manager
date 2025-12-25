@@ -35,6 +35,15 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuItemValidation {
         let openItem = NSMenuItem(title: "Open…", action: #selector(openDocument(_:)), keyEquivalent: "o"); openItem.target = self
         file.addItem(newItem)
         file.addItem(openItem)
+
+        let openBundle = NSMenuItem(title: "Open App Bundle…", action: #selector(openFromAppBundle(_:)), keyEquivalent: "")
+        openBundle.target = self
+        file.addItem(openBundle)
+
+        let openOSAX = NSMenuItem(title: "Open Scripting Addition…", action: #selector(openFromScriptingAddition(_:)), keyEquivalent: "")
+        openOSAX.target = self
+        file.addItem(openOSAX)
+
         file.addItem(NSMenuItem.separator())
         file.addItem(NSMenuItem(title: "Close", action: #selector(NSWindow.performClose(_:)), keyEquivalent: "w"))
         file.addItem(NSMenuItem(title: "Save…", action: #selector(NSDocument.save(_:)), keyEquivalent: "s"))
@@ -47,12 +56,29 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuItemValidation {
         exportItem.target = self
         file.addItem(exportItem)
 
-        // Optional helper: reveal the app's sandbox Documents (where debug exports go)
+        let exportPDF = NSMenuItem(title: "Export Preview as PDF…", action: #selector(exportPreviewPDF(_:)), keyEquivalent: "p")
+        exportPDF.keyEquivalentModifierMask = [.command, .option]
+        exportPDF.target = self
+        file.addItem(exportPDF)
+
         let revealItem = NSMenuItem(title: "Reveal App Documents…", action: #selector(revealAppDocuments(_:)), keyEquivalent: "")
         revealItem.target = self
         file.addItem(revealItem)
 
         fileItem.submenu = file
+
+        // Edit
+        let editItem = NSMenuItem(); main.addItem(editItem)
+        let edit = NSMenu(title: "Edit")
+        edit.addItem(withTitle: "Undo", action: #selector(UndoManager.undo), keyEquivalent: "z")
+        let redo = NSMenuItem(title: "Redo", action: #selector(UndoManager.redo), keyEquivalent: "Z")
+        redo.keyEquivalentModifierMask = [.command, .shift]
+        edit.addItem(redo)
+        edit.addItem(NSMenuItem.separator())
+        let addSuite = NSMenuItem(title: "Add Suite", action: #selector(addSuite(_:)), keyEquivalent: "+")
+        addSuite.target = self
+        edit.addItem(addSuite)
+        editItem.submenu = edit
 
         // Window
         let windowItem = NSMenuItem(); main.addItem(windowItem)
@@ -69,19 +95,19 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuItemValidation {
         NSApp.mainMenu = main
     }
 
-    // MARK: - Menu validation
+    // MARK: - Validation
     func validateMenuItem(_ menuItem: NSMenuItem) -> Bool {
         switch menuItem.action {
-        case #selector(newDocument(_:)), #selector(openDocument(_:)), #selector(revealAppDocuments(_:)):
+        case #selector(newDocument(_:)), #selector(openDocument(_:)), #selector(openFromAppBundle(_:)), #selector(openFromScriptingAddition(_:)), #selector(revealAppDocuments(_:)):
             return true
-        case #selector(exportSDEF(_:)):
+        case #selector(exportSDEF(_:)), #selector(exportPreviewPDF(_:)), #selector(addSuite(_:)):
             return (NSDocumentController.shared.currentDocument as? SDEDocument) != nil
         default:
             return true
         }
     }
 
-    // MARK: - Actions (force main thread for AppKit)
+    // MARK: - Actions
     @objc func newDocument(_ sender: Any?) {
         if !Thread.isMainThread { return DispatchQueue.main.async { self.newDocument(sender) } }
         let doc = SDEDocument()
@@ -92,7 +118,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuItemValidation {
 
     @objc func openDocument(_ sender: Any?) {
         if !Thread.isMainThread { return DispatchQueue.main.async { self.openDocument(sender) } }
-
+        
         let panel = NSOpenPanel()
         panel.allowsMultipleSelection = false
         panel.canChooseDirectories = false
@@ -103,33 +129,97 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuItemValidation {
         } else {
             panel.allowedFileTypes = ["sdef", "xml"]
         }
-
-        if panel.runModal() == .OK, let url = panel.url {
-            do {
-                let data = try Data(contentsOf: url)
-                let typeName = (url.pathExtension.lowercased() == "xml") ? "public.xml" : "com.apple.scripting-definition"
-                let doc = SDEDocument()
-                try doc.read(from: data, ofType: typeName)
-                NSDocumentController.shared.addDocument(doc)
-                doc.makeWindowControllers()
-                doc.windowControllers.first?.window?.title = url.lastPathComponent
-                doc.showWindows()
-            } catch {
+        
+        guard panel.runModal() == .OK, let url = panel.url else { return }
+        
+        // Let NSDocumentController drive read + window creation
+        NSDocumentController.shared.openDocument(withContentsOf: url, display: true) { doc, wasOpen, err in
+            if let err = err {
                 let a = NSAlert(); a.messageText = "Could not open file"
-                a.informativeText = error.localizedDescription
+                a.informativeText = err.localizedDescription
                 a.alertStyle = .warning; a.runModal()
+                return
             }
+            guard let doc = doc as? SDEDocument else { return }
+            // Make sure the window is visible and frontmost
+            if let win = doc.windowControllers.first?.window {
+                NSApp.activate(ignoringOtherApps: true)
+                win.makeKeyAndOrderFront(nil)
+            }
+        }
+    }
+    
+    
+    @objc func openFromAppBundle(_ sender: Any?) {
+        if !Thread.isMainThread { return DispatchQueue.main.async { self.openFromAppBundle(sender) } }
+        let panel = NSOpenPanel()
+        panel.canChooseDirectories = false
+        panel.canCreateDirectories = false
+        panel.allowsMultipleSelection = false
+        panel.treatsFilePackagesAsDirectories = true
+        if #available(macOS 12.0, *) {
+            panel.allowedContentTypes = [.applicationBundle]
+        } else {
+            panel.allowedFileTypes = ["app"]
+        }
+        guard panel.runModal() == .OK, let appURL = panel.url else { return }
+        let sdefURL = findSDEF(in: appURL)
+        if let sdef = sdefURL { openSDEF(at: sdef) } else {
+            let a = NSAlert(); a.messageText = "No SDEF found"
+            a.informativeText = "No *.sdef file was found in \(appURL.lastPathComponent)/Contents/Resources."
+            a.alertStyle = .informational; a.runModal()
+        }
+    }
+
+    @objc func openFromScriptingAddition(_ sender: Any?) {
+        if !Thread.isMainThread { return DispatchQueue.main.async { self.openFromScriptingAddition(sender) } }
+        let panel = NSOpenPanel()
+        panel.canChooseDirectories = false
+        panel.canCreateDirectories = false
+        panel.allowsMultipleSelection = false
+        panel.treatsFilePackagesAsDirectories = true
+        if #available(macOS 12.0, *) {
+            let osax = UTType(filenameExtension: "osax")
+            panel.allowedContentTypes = [osax].compactMap { $0 }
+        } else {
+            panel.allowedFileTypes = ["osax"]
+        }
+        guard panel.runModal() == .OK, let osaxURL = panel.url else { return }
+        let sdefURL = findSDEF(in: osaxURL)
+        if let sdef = sdefURL { openSDEF(at: sdef) } else {
+            let a = NSAlert(); a.messageText = "No SDEF found"
+            a.informativeText = "No *.sdef file was found in \(osaxURL.lastPathComponent)/Contents/Resources."
+            a.alertStyle = .informational; a.runModal()
+        }
+    }
+
+    private func findSDEF(in bundleURL: URL) -> URL? {
+        let resources = bundleURL.appendingPathComponent("Contents/Resources", isDirectory: true)
+        let fm = FileManager.default
+        guard let list = try? fm.contentsOfDirectory(at: resources, includingPropertiesForKeys: nil, options: [.skipsHiddenFiles]) else { return nil }
+        return list.first { $0.pathExtension.lowercased() == "sdef" }
+    }
+
+    private func openSDEF(at url: URL) {
+        do {
+            let data = try Data(contentsOf: url)
+            let typeName = (url.pathExtension.lowercased() == "xml") ? "public.xml" : "com.apple.scripting-definition"
+            let doc = SDEDocument()
+            try doc.read(from: data, ofType: typeName)
+            NSDocumentController.shared.addDocument(doc)
+            doc.makeWindowControllers()
+            doc.windowControllers.first?.window?.title = url.lastPathComponent
+            doc.showWindows()
+        } catch {
+            let a = NSAlert(); a.messageText = "Could not open file"
+            a.informativeText = error.localizedDescription
+            a.alertStyle = .warning; a.runModal()
         }
     }
 
     @objc func exportSDEF(_ sender: Any?) {
         if !Thread.isMainThread { return DispatchQueue.main.async { self.exportSDEF(sender) } }
-
-        guard let doc = NSDocumentController.shared.currentDocument as? SDEDocument else {
-            let a = NSAlert(); a.messageText = "No document is active"
-            a.informativeText = "Open a .sdef or create a new document first."
-            a.alertStyle = .warning; a.runModal(); return
-        }
+        guard let doc = NSDocumentController.shared.currentDocument as? SDEDocument else { return }
 
         let save = NSSavePanel()
         save.canCreateDirectories = true
@@ -144,25 +234,57 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuItemValidation {
             save.allowedFileTypes = ["sdef", "xml"]
         }
 
-        func write(to url: URL) {
-            do {
-                let data = SDEFWriter.makeXML(from: doc.parsedModelSnapshot(), title: doc.displayName ?? "Dictionary")
-                try data.write(to: url, options: .atomic)
-            } catch {
-                let a = NSAlert(); a.messageText = "Export failed"
-                a.informativeText = error.localizedDescription
-                a.alertStyle = .warning; a.runModal()
-            }
-        }
-
         if let window = doc.windowControllers.first?.window {
             save.beginSheetModal(for: window) { resp in
                 guard resp == .OK, let url = save.url else { return }
-                write(to: url)
+                do {
+                    let data = SDEFWriter.makeXML(from: doc.parsedModelSnapshot(), title: doc.displayName ?? "Dictionary")
+                    try data.write(to: url, options: .atomic)
+                } catch { self.present(error) }
             }
         } else if save.runModal() == .OK, let url = save.url {
-            write(to: url)
+            do {
+                let data = SDEFWriter.makeXML(from: doc.parsedModelSnapshot(), title: doc.displayName ?? "Dictionary")
+                try data.write(to: url, options: .atomic)
+            } catch { present(error) }
         }
+    }
+
+    @objc func exportPreviewPDF(_ sender: Any?) {
+        if !Thread.isMainThread { return DispatchQueue.main.async { self.exportPreviewPDF(sender) } }
+        guard let doc = NSDocumentController.shared.currentDocument as? SDEDocument else { return }
+
+        let save = NSSavePanel()
+        if #available(macOS 12.0, *) {
+            save.allowedContentTypes = [.pdf]
+        } else {
+            save.allowedFileTypes = ["pdf"]
+        }
+        save.nameFieldStringValue = (doc.displayName ?? "Dictionary") + ".pdf"
+
+        let writePDF: (URL) -> Void = { url in
+            let text = PreviewTextBuilder.makeText(from: doc.parsedModelSnapshot())
+            let page = NSRect(x: 0, y: 0, width: 612, height: 792)
+            let tv = NSTextView(frame: page)
+            tv.isEditable = false
+            tv.string = text
+            let data = tv.dataWithPDF(inside: tv.bounds)
+            do { try data.write(to: url) } catch { self.present(error) }
+        }
+
+        if let win = NSApp.keyWindow {
+            save.beginSheetModal(for: win) { resp in
+                guard resp == .OK, let url = save.url else { return }
+                writePDF(url)
+            }
+        } else if save.runModal() == .OK, let url = save.url {
+            writePDF(url)
+        }
+    }
+
+    @objc func addSuite(_ sender: Any?) {
+        if !Thread.isMainThread { return DispatchQueue.main.async { self.addSuite(sender) } }
+        (NSDocumentController.shared.currentDocument as? SDEDocument)?.addSuite()
     }
 
     @objc func revealAppDocuments(_ sender: Any?) {
@@ -170,10 +292,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuItemValidation {
         do {
             let docs = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
             NSWorkspace.shared.activateFileViewerSelecting([docs])
-        } catch {
-            let a = NSAlert(); a.messageText = "Could not reveal folder"
-            a.informativeText = error.localizedDescription
-            a.alertStyle = .warning; a.runModal()
-        }
+        } catch { present(error) }
+    }
+
+    private func present(_ error: Error) {
+        let a = NSAlert(); a.messageText = "Operation failed"
+        a.informativeText = error.localizedDescription
+        a.alertStyle = .warning; a.runModal()
     }
 }
