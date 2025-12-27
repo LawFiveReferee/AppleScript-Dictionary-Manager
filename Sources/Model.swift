@@ -1,54 +1,75 @@
 import Foundation
 
-struct SDEFDocumentModel {
-    var suites: [Suite] = []
+public struct SDEFDocumentModel {
+    public var suites: [Suite] = []
+    public init(suites: [Suite] = []) { self.suites = suites }
+}
 
-    static func sample() -> SDEFDocumentModel {
-        var m = SDEFDocumentModel()
-        m.suites = [
-            Suite(name: "Standard Suite", code: "Core"),
-            Suite(name: "My Suite", code: "MYSt")
-        ]
-        return m
+public struct Suite {
+    public var name: String
+    public var code: String
+    public var commands: [Command] = []
+    public var classes: [SDEFClass] = []
+    public init(name: String, code: String, commands: [Command] = [], classes: [SDEFClass] = []) {
+        self.name = name
+        self.code = code
+        self.commands = commands
+        self.classes = classes
     }
 }
 
-struct Suite {
-    var name: String
-    var code: String
-    var classes: [ClassDef] = []
-    var commands: [Command] = []
-    init(name: String, code: String) { self.name = name; self.code = code }
+public struct Command {
+    public var name: String
+    public var code: String
+    public var parameters: [Parameter] = []
+    public init(name: String, code: String, parameters: [Parameter] = []) {
+        self.name = name
+        self.code = code
+        self.parameters = parameters
+    }
 }
 
-struct ClassDef {
-    var name: String
-    var code: String
-    var properties: [Property] = []
+public struct Parameter {
+    public var name: String
+    public var code: String
+    public var type: String
+    public var optional: Bool
+    public init(name: String, code: String, type: String, optional: Bool) {
+        self.name = name
+        self.code = code
+        self.type = type
+        self.optional = optional
+    }
 }
 
-struct Command {
-    var name: String
-    var code: String
-    var parameters: [Parameter] = []
+public struct SDEFClass {
+    public var name: String
+    public var code: String
+    public var properties: [SDEFProperty] = []
+    public init(name: String, code: String, properties: [SDEFProperty] = []) {
+        self.name = name
+        self.code = code
+        self.properties = properties
+    }
 }
 
-struct Property {
-    var name: String
-    var code: String
-    var type: String
-}
-
-struct Parameter {
-    var name: String
-    var code: String
-    var type: String
-    var optional: Bool
-}
-
-/// What the user selected in the outline
-enum Selection {
-    case suite(Suite)
-    case classDef(ClassDef)
-    case command(Command)
+public struct SDEFProperty {
+    public var name: String
+    public var code: String
+    public var type: String
+    public init(name: String, code: String, type: String) {
+        self.name = name
+        self.code = code
+        self.type = type
+    }
+    // Selection model used by legacy preview code
+    public enum SDESelection {
+        case none
+        case suite(index: Int)
+        case command(suiteIndex: Int, commandIndex: Int)
+        case sdefClass(suiteIndex: Int, classIndex: Int)
+    }
+    
+    // Back-compat with files that reference `Selection`
+    public typealias Selection = SDESelection
 }

@@ -7,15 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8319F2A12F0099D50094C948 /* SDEFEncoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8319F2A02F0099D50094C948 /* SDEFEncoding.swift */; };
 		83A7862D2EFB330D0057124D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A7862C2EFB330D0057124D /* AppDelegate.swift */; };
 		83A7862F2EFB333A0057124D /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A7862E2EFB333A0057124D /* MainViewController.swift */; };
 		83A786312EFB33560057124D /* SDEDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A786302EFB33560057124D /* SDEDocument.swift */; };
 		83A786332EFB343B0057124D /* info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 83A786322EFB343B0057124D /* info.plist */; };
 		83A7863C2EFB383D0057124D /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A7863B2EFB383D0057124D /* Model.swift */; };
-		83A7863E2EFB385F0057124D /* DictionaryOutlineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A7863D2EFB385F0057124D /* DictionaryOutlineViewController.swift */; };
 		83A786412EFB41850057124D /* Main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A786402EFB41850057124D /* Main.swift */; };
-		83A786432EFB42270057124D /* DictionaryPreviewVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A786422EFB42270057124D /* DictionaryPreviewVM.swift */; };
-		83A786452EFB425C0057124D /* DictionaryPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A786442EFB425C0057124D /* DictionaryPreview.swift */; };
 		83A786472EFB44140057124D /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A786462EFB44140057124D /* Parser.swift */; };
 		83A7864B2EFB6FCA0057124D /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 83A7864A2EFB6FCA0057124D /* .gitignore */; };
 		83A7864D2EFB70300057124D /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 83A7864C2EFB70300057124D /* README.md */; };
@@ -24,6 +22,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8319F2A02F0099D50094C948 /* SDEFEncoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDEFEncoding.swift; sourceTree = "<group>"; };
 		8370B65B2EFC6EF20086B8A6 /* AppleScriptDictionaryManager.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = AppleScriptDictionaryManager.xcodeproj; sourceTree = "<group>"; };
 		83A786192EFB32BF0057124D /* AppleScriptDictionaryManager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AppleScriptDictionaryManager.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		83A7862C2EFB330D0057124D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -111,9 +110,10 @@
 				83A7862E2EFB333A0057124D /* MainViewController.swift */,
 				83A7863B2EFB383D0057124D /* Model.swift */,
 				83A786462EFB44140057124D /* Parser.swift */,
-				83A786302EFB33560057124D /* SDEDocument.swift */,
 				83F701602EFC84A600793B0D /* PreviewTextBuilder.swift */,
+				83A786302EFB33560057124D /* SDEDocument.swift */,
 				83A7864E2EFB7A9B0057124D /* SDEFWriter.swift */,
+				8319F2A02F0099D50094C948 /* SDEFEncoding.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -210,14 +210,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				83A786412EFB41850057124D /* Main.swift in Sources */,
-				83A786432EFB42270057124D /* DictionaryPreviewVM.swift in Sources */,
-				83A786452EFB425C0057124D /* DictionaryPreview.swift in Sources */,
 				83F701612EFC84A600793B0D /* PreviewTextBuilder.swift in Sources */,
 				83A7863C2EFB383D0057124D /* Model.swift in Sources */,
 				83A7862D2EFB330D0057124D /* AppDelegate.swift in Sources */,
 				83A786472EFB44140057124D /* Parser.swift in Sources */,
+				8319F2A12F0099D50094C948 /* SDEFEncoding.swift in Sources */,
 				83A786312EFB33560057124D /* SDEDocument.swift in Sources */,
-				83A7863E2EFB385F0057124D /* DictionaryOutlineViewController.swift in Sources */,
 				83A7864F2EFB7A9B0057124D /* SDEFWriter.swift in Sources */,
 				83A7862F2EFB333A0057124D /* MainViewController.swift in Sources */,
 			);
